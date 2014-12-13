@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.google.inject.Module;
 import com.hawa.scrap.R;
 import com.hawa.scrap.dependencyinjection.DependencyInjectionActivity;
 import com.hawa.scrap.event.VolumePressEvent;
@@ -44,8 +45,8 @@ public class MainActivity extends DependencyInjectionActivity {
     }
 
     @Override
-    protected List<Object> getModules() {
-        return Arrays.<Object>asList(new MainModule(this));
+    protected List<Module> getModules() {
+        return Arrays.<Module>asList(new MainModule(this));
     }
 
     @Override

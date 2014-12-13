@@ -1,27 +1,30 @@
 package com.hawa.scrap.dependencyinjection;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+
 import java.util.List;
 
-import dagger.ObjectGraph;
-
 public abstract class DependencyInjectionApplication extends android.app.Application {
-    private ObjectGraph mObjectGraph;
+
+    private Injector mInjector;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        mObjectGraph = ObjectGraph.create(getModules().toArray());
-        mObjectGraph.inject(this);
+        mInjector = Guice.createInjector(getModules());
+        mInjector.injectMembers(this);
     }
 
-    protected abstract List<Object> getModules() ;
+    protected abstract List<Module> getModules();
 
-    public ObjectGraph getObjectGraph() {
-        return mObjectGraph;
+    public Injector getInjector() {
+        return mInjector;
     }
 
-    public ObjectGraph createScopedGraph(Object... modules) {
-        return mObjectGraph.plus(modules);
+    public void inject(Object object) {
+        mInjector.injectMembers(object);
     }
+
 }

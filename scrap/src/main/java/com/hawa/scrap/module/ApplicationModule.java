@@ -3,46 +3,32 @@ package com.hawa.scrap.module;
 
 import android.content.Context;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.hawa.scrap.Application;
 import com.hawa.scrap.dependencyinjection.ForApplication;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
-import dagger.Module;
-import dagger.Provides;
 
-@Module(
-        injects = {
-                Application.class,
-                Bus.class},
-        includes = {
-                ServiceModule.class
-        },
-        library = true
-)
-public class ApplicationModule {
-    private final Application application;
+public class ApplicationModule extends AbstractModule {
+    private final Application mApplication;
 
     public ApplicationModule(Application application) {
-        this.application = application;
+        mApplication = application;
     }
 
-    /**
-     * Allow the application context to be injected but require that it be annotated with
-     * {@link ForApplication @ForApplication} to explicitly differentiate it from an activity context.
-     */
     @Provides
-    @Singleton
     @ForApplication
     Context provideApplicationContext() {
-        return application;
+        return mApplication;
     }
 
     @Provides
     @Singleton
     Application provideApplication() {
-        return application;
+        return mApplication;
     }
 
     @Provides
@@ -51,4 +37,8 @@ public class ApplicationModule {
         return new Bus();
     }
 
+    @Override
+    protected void configure() {
+
+    }
 }

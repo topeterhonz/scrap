@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.inject.Module;
 import com.hawa.scrap.R;
 import com.hawa.scrap.dependencyinjection.DependencyInjectionFragment;
 import com.hawa.scrap.module.ImagePagerModule;
@@ -50,7 +51,7 @@ public class ImagePagerFragment extends DependencyInjectionFragment implements I
     }
 
     @Override
-    protected List<Object> getModules() {
-        return Arrays.<Object>asList(new ImagePagerModule(this));
+    protected List<Module> getModules() {
+        return Arrays.<Module>asList(new ImagePagerModule(this));
     }
 }

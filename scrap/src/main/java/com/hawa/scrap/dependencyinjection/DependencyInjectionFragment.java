@@ -3,30 +3,34 @@ package com.hawa.scrap.dependencyinjection;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.google.inject.Injector;
+import com.google.inject.Module;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import dagger.Module;
-import dagger.ObjectGraph;
 
 public abstract class DependencyInjectionFragment extends Fragment {
 
-    private ObjectGraph mObjectGraph;
+    private Injector mInjector;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Create the activity graph by .plus-ing our modules onto the application graph.
         DependencyInjectionActivity activity = (DependencyInjectionActivity) getActivity();
-        mObjectGraph = activity.getObjectGraph().plus(getModules().toArray());
+        mInjector = activity.getInjector().createChildInjector(getModules());
 
-        mObjectGraph.inject(this);
+        mInjector.injectMembers(this);
     }
 
-    protected abstract List<Object> getModules();
+    protected List<Module> getModules() {
+        return new ArrayList<Module>();
+    }
 
     @Override
     public void onDestroy() {
-        mObjectGraph = null;
+        mInjector = null;
         super.onDestroy();
     }
 

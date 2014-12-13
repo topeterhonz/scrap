@@ -1,5 +1,7 @@
 package com.hawa.scrap.module;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.hawa.scrap.ui.ImagePagerFragment;
 import com.hawa.scrap.ui.ImagePagerPresenter;
 import com.hawa.scrap.ui.ImagePagerPresenterImpl;
@@ -8,16 +10,8 @@ import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
-import dagger.Module;
-import dagger.Provides;
 
-@Module(
-        injects = {
-                ImagePagerFragment.class,
-                ImagePagerPresenterImpl.class},
-        addsTo = MainModule.class
-)
-public class ImagePagerModule {
+public class ImagePagerModule extends AbstractModule {
     private ImagePagerFragment mImagePagerFragment;
 
     public ImagePagerModule(ImagePagerFragment imagePagerFragment) {
@@ -37,4 +31,8 @@ public class ImagePagerModule {
         return impl;
     }
 
+    @Override
+    protected void configure() {
+
+    }
 }

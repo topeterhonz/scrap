@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.hawa.scrap.domain.ConfigurationsService;
 import com.hawa.scrap.domain.PostsService;
 import com.hawa.scrap.network.TumblrDeserializer;
@@ -13,19 +15,16 @@ import com.hawa.scrap.operation.TumblrPostsOperation;
 
 import javax.inject.Singleton;
 
-import dagger.Module;
-import dagger.Provides;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
-@Module(
-        injects = {
-                PostsService.class,
-                TumblrPostsOperation.class,
-                ConfigurationsService.class,
-        }
-)
-public class ServiceModule {
+public class ServiceModule extends AbstractModule {
+
+    @Override
+    protected void configure() {
+        bind(PostsService.class).in(Singleton.class);
+        bind(ConfigurationsService.class).in(Singleton.class);
+    }
 
     @Provides
     @Singleton
