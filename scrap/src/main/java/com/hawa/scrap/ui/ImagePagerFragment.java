@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.hawa.scrap.R;
 import com.hawa.scrap.dependencyinjection.DependencyInjectionFragment;
-import com.hawa.scrap.domain.PostsService;
+import com.hawa.scrap.module.ImagePagerModule;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,15 +1,13 @@
 package com.hawa.scrap.ui;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 
 import com.hawa.scrap.R;
 import com.hawa.scrap.dependencyinjection.DependencyInjectionActivity;
-import com.hawa.scrap.domain.PostsService;
 import com.hawa.scrap.event.VolumePressEvent;
+import com.hawa.scrap.module.MainModule;
 import com.squareup.otto.Bus;
 
 import java.util.Arrays;

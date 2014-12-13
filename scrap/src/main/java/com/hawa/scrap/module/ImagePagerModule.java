@@ -1,5 +1,9 @@
-package com.hawa.scrap.ui;
+package com.hawa.scrap.module;
 
+import com.hawa.scrap.ui.ImagePagerFragment;
+import com.hawa.scrap.ui.ImagePagerPresenter;
+import com.hawa.scrap.ui.ImagePagerPresenterImpl;
+import com.hawa.scrap.ui.ImagePagerView;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;

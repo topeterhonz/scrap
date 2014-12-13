@@ -1,9 +1,10 @@
-package com.hawa.scrap.ui;
+package com.hawa.scrap.module;
 
 import android.content.Context;
 
 import com.hawa.scrap.dependencyinjection.ForActivity;
 import com.hawa.scrap.module.ApplicationModule;
+import com.hawa.scrap.ui.MainActivity;
 
 import javax.inject.Singleton;
 
