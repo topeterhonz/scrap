@@ -1,6 +1,5 @@
-package com.hawa.scrap;
+package com.hawa.scrap.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
@@ -9,17 +8,32 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hawa.scrap.R;
+import com.hawa.scrap.domain.PostsService;
+import com.hawa.scrap.framework.ErrorCode;
+import com.hawa.scrap.framework.ResultCallback;
+import com.hawa.scrap.model.Post;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
 public class InfiniteImagePagerAdapter extends PagerAdapter {
 
     private Context mContext;
-    private TumblrImageProvider mImageProvider;
+    private PostsService mPostsService;
+    private List<Post> mPosts;
+    private int mTotalPages;
 
-    public InfiniteImagePagerAdapter(Context context, TumblrImageProvider imageProvider) {
+    public InfiniteImagePagerAdapter(Context context, PostsService postsService) {
         mContext = context;
-        mImageProvider = imageProvider;
+        mPostsService = postsService;
+        mPosts = mPostsService.getPostsCached();
+        mTotalPages = mPostsService.getTotalPosts();
     }
 
     private void showLoading(View view) {
@@ -32,7 +46,7 @@ public class InfiniteImagePagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return Integer.MAX_VALUE;
+        return mTotalPages == 0 ? Integer.MAX_VALUE : mTotalPages;
     }
 
     @Override
@@ -45,26 +59,29 @@ public class InfiniteImagePagerAdapter extends PagerAdapter {
         final View view = LayoutInflater.from(mContext).inflate(R.layout.page_content, container, false);
         TextView textView = (TextView) view.findViewById(R.id.page_content_text);
         textView.setText(Integer.toString(position));
-        final ImageView imageView = (ImageView) view.findViewById(R.id.page_content_image);
+        final ImageViewTouch imageView = (ImageViewTouch) view.findViewById(R.id.page_content_image);
 
-        showLoading(view);
-
-        if (mImageProvider.isAvailable(position)) {
-            loadImageFromUrl(position, view, imageView);
-        } else {
-            mImageProvider.loadNext(new TumblrImageProvider.LoadCompleteListener() {
+        if (mPosts == null || mPosts.size() <= position) {
+            mPostsService.getPostsForNextPage(new ResultCallback<List<Post>, PostsService.ResultCode>() {
                 @Override
-                public void onSuccess() {
+                public void onResult(List<Post> posts, PostsService.ResultCode resultCode) {
+                    mPosts = posts;
                     loadImageFromUrl(position, view, imageView);
                 }
 
                 @Override
-                public void onFailure() {
+                public void onError(ErrorCode errorCode) {
                     hideLoading(view);
                 }
-            });
-        }
 
+                @Override
+                public void onProcessing() {
+                    showLoading(view);
+                }
+            });
+        } else {
+            loadImageFromUrl(position, view, imageView);
+        }
 
         container.addView(view);
         return view;
@@ -72,7 +89,9 @@ public class InfiniteImagePagerAdapter extends PagerAdapter {
 
 
     private void loadImageFromUrl(int index, final View view, ImageView imageView) {
-        String imageUrl = mImageProvider.provideImageUrl(index);
+        showLoading(view);
+
+        String imageUrl = mPosts.get(index).getPhotos().get(0).getOriginal_size().getUrl();
 
         Picasso.with(mContext).load(imageUrl).into(imageView, new Callback() {
             @Override

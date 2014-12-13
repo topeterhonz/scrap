@@ -1,4 +1,4 @@
-package com.hawa.scrap;
+package com.hawa.scrap.ui;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -6,16 +6,21 @@ import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.google.inject.Inject;
-import com.hawa.scrap.ioc.InjectionActivity;
+import com.hawa.scrap.R;
+import com.hawa.scrap.dependencyinjection.DependencyInjectionActivity;
+import com.hawa.scrap.domain.PostsService;
+import com.hawa.scrap.event.VolumePressEvent;
+import com.squareup.otto.Bus;
 
-public class ImagePagerActivity extends InjectionActivity {
+import java.util.Arrays;
+import java.util.List;
 
-    private ViewPager mPager;
-    private ProgressDialog mProgressDialog;
+import javax.inject.Inject;
+
+public class MainActivity extends DependencyInjectionActivity {
 
     @Inject
-    private TumblrImageProvider mImageProvider;
+    Bus mBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +34,20 @@ public class ImagePagerActivity extends InjectionActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
-        setContentView(R.layout.activity_image_pager);
+        setContentView(R.layout.activity_main);
 
-        mImageProvider.initialise("androidniceties.tumblr.com");
-        mPager = (ViewPager) findViewById(R.id.view_pager);
-        mPager.setOffscreenPageLimit(2);
-        mPager.setAdapter(new InfiniteImagePagerAdapter(ImagePagerActivity.this, mImageProvider));
+        if (savedInstanceState == null) {
+            ImagePagerFragment imagePagerFragment = new ImagePagerFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.main_container, imagePagerFragment, ImagePagerFragment.TAG)
+                    .commit();
+        }
+    }
+
+    @Override
+    protected List<Object> getModules() {
+        return Arrays.<Object>asList(new MainModule(this));
     }
 
     @Override
@@ -43,13 +56,11 @@ public class ImagePagerActivity extends InjectionActivity {
         int action = event.getAction();
 
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            final int currentIndex = mPager.getCurrentItem();
             if (keyCode == KeyEvent.KEYCODE_VOLUME_UP && action == KeyEvent.ACTION_DOWN) {
-                if (currentIndex > 0) {
-                    mPager.setCurrentItem(currentIndex - 1, true);
-                }
+                mBus.post(new VolumePressEvent(VolumePressEvent.Volume.Up));
+
             } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && action == KeyEvent.ACTION_DOWN) {
-                mPager.setCurrentItem(currentIndex + 1, true);
+                mBus.post(new VolumePressEvent(VolumePressEvent.Volume.Down));
             }
             return true;
         } else {

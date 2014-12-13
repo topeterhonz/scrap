@@ -7,10 +7,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:name=".ioc.InjectionApplication">
+        android:name=".Application">
         <activity
-            android:name=".ImagePagerActivity"
-            android:label="@string/title_activity_image_pager"
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
             <intent-filter>

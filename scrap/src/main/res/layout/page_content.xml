@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#202020">
 
-    <ImageView
+    <it.sephiroth.android.library.imagezoom.ImageViewTouch
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/page_content_image" />
