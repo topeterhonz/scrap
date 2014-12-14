@@ -20,6 +20,14 @@ public class ConfigurationsService {
     }
 
     public String getTumblrApiKey() {
-        return "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4";
+        return "OHHiScy8tKLA4WOoO8VUWI5IZ8Lm9DBMPfU3VTjy2fDQvd5ELS";
+    }
+
+    public String getTumblrApiSecret() {
+        return "F85MYR9apBgYnCBrrAGgG9xIk0UG3OTKcOefgvoO63tXn23Y4y";
+    }
+
+    public String getTumblrCallbackUrl() {
+        return "scrap://scrap/ok";
     }
 }

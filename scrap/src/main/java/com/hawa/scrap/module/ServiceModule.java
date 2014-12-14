@@ -9,6 +9,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.hawa.scrap.domain.ConfigurationsService;
 import com.hawa.scrap.domain.PostsService;
+import com.hawa.scrap.domain.TumblrAuthoriseService;
 import com.hawa.scrap.network.TumblrDeserializer;
 import com.hawa.scrap.network.TumblrRequestInterceptor;
 import com.hawa.scrap.operation.TumblrPostsOperation;

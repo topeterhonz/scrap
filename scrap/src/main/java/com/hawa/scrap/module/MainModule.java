@@ -6,6 +6,7 @@ import android.content.Context;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.hawa.scrap.dependencyinjection.ForActivity;
+import com.hawa.scrap.domain.TumblrAuthoriseService;
 import com.hawa.scrap.ui.MainActivity;
 
 import javax.inject.Singleton;
@@ -40,7 +41,7 @@ public class MainModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
+        bind(TumblrAuthoriseService.class).in(Singleton.class);
     }
 
 }

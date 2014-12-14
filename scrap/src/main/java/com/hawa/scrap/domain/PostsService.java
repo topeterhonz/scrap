@@ -56,7 +56,8 @@ public class PostsService {
 
         mTumblrPostsOperation.getPosts(
                 mConfigurationsService.getSiteId(),
-                TYPE, mCache.size(),
+                TYPE,
+                mCache.size(),
                 mConfigurationsService.getPostPageSize(),
                 new Callback<PostsResponse>() {
 

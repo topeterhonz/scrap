@@ -1,5 +1,6 @@
 package com.hawa.scrap.ui;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.View;
 import com.google.inject.Module;
 import com.hawa.scrap.R;
 import com.hawa.scrap.dependencyinjection.DependencyInjectionActivity;
+import com.hawa.scrap.domain.TumblrAuthoriseService;
 import com.hawa.scrap.event.VolumePressEvent;
 import com.hawa.scrap.module.MainModule;
 import com.squareup.otto.Bus;
@@ -20,6 +22,9 @@ public class MainActivity extends DependencyInjectionActivity {
 
     @Inject
     Bus mBus;
+
+    @Inject
+    TumblrAuthoriseService mTumblrAuthoriseService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,20 @@ public class MainActivity extends DependencyInjectionActivity {
                     .beginTransaction()
                     .add(R.id.main_container, imagePagerFragment, ImagePagerFragment.TAG)
                     .commit();
+
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (this.getIntent().getData() == null) {
+            mTumblrAuthoriseService.LaunchTumblrAuthorize();
+
+        } else {
+            String oAuthVerifier = this.getIntent().getData().getQueryParameter("oauth_verifier");
+            mTumblrAuthoriseService.VerifyTumblrAuthorise(oAuthVerifier);
         }
     }
 
